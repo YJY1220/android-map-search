@@ -5,6 +5,7 @@ import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Query
 
+//KakaoAPIInstance 코드 작성
 interface KakaoApiService {
     @GET("v2/local/search/keyword.json")
     suspend fun searchPlaces(
