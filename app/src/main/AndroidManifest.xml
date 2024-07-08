@@ -15,6 +15,7 @@
         android:theme="@style/Theme.Map"
         tools:targetApi="31">
 
+        <!--kakao api sdk 추가 : 자동으로 해당 키 사용/ 보안성-->
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="@string/kakao_api_key" />
