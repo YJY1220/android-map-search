@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 
+//MapViewMoel
 class MapViewModel(application: Application) : AndroidViewModel(application) {
     private val repository = MapAccess(application)
 
