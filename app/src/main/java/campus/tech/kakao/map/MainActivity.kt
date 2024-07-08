@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 class MainActivity : AppCompatActivity() {
 
+    //private 필드 변수화
     private lateinit var binding: ActivityMainBinding
     private lateinit var viewModel: MapViewModel
     private lateinit var searchAdapter: SearchAdapter
@@ -21,10 +22,14 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewModel = ViewModelProvider(this).get(MapViewModel::class.java)
+        //ViewModel 초기화
+        val viewModelInit = ViewModelProvider.AndroidViewModelFactory.getInstance(application)
+        viewModel = ViewModelProvider(this, viewModelInit).get(MapViewModel::class.java)
 
         setupRecyclerViews()
         setupSearchEditText()
@@ -33,7 +38,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupRecyclerViews() {
+        //검색결과 adapter 초기화
         searchAdapter = SearchAdapter { item ->
+            //이미 선택되었는지 확인
             if (viewModel.selectedItems.value?.contains(item) == true) {
                 Toast.makeText(this, getString(R.string.item_already_selected), Toast.LENGTH_SHORT).show()
             } else {
@@ -41,18 +48,21 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        //검색결과 데이터 목록 RecyclerView 설정
         binding.searchResultsRecyclerView.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
             adapter = searchAdapter
         }
-
+        //선택된 항목 adapter 초기화
         selectedAdapter = SelectedAdapter { item -> viewModel.removeSelectedItem(item) }
+        //선택 데이터 RecyclerView 가로
         binding.selectedItemsRecyclerView.apply {
             layoutManager = LinearLayoutManager(this@MainActivity, RecyclerView.HORIZONTAL, false)
             adapter = selectedAdapter
         }
     }
 
+    //검색 시 edit
     private fun setupSearchEditText() {
         binding.searchEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -70,12 +80,14 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
+    //text 지우는 버튼
     private fun setupClearTextButton() {
         binding.clearTextButton.setOnClickListener {
             binding.searchEditText.text.clear()
         }
     }
 
+    //검색 결과 어댑터에 넘기기
     private fun observeViewModel() {
         viewModel.searchResults.observe(this, Observer { results ->
             searchAdapter.submitList(results)
@@ -101,6 +113,7 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
+        //선택된 항목 UI에 업데이트
         viewModel.selectedItems.observe(this, Observer { selectedItems ->
             selectedAdapter.submitList(selectedItems)
         })

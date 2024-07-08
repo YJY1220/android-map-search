@@ -11,7 +11,9 @@ class MapAccess(context: Context) {
     suspend fun searchItems(query: String, page: Int = 1, size: Int = 15): List<MapItem> {
         return withContext(Dispatchers.IO) {
             val apiKey = "KakaoAK ${BuildConfig.KAKAO_REST_API_KEY}"
+
             val response = RetrofitInstance.api.searchPlaces(apiKey, query, page, size)
+
             if (response.isSuccessful) {
                 Log.d("MapAccess", "Response: ${response.body()?.documents}")
                 response.body()?.documents ?: emptyList()
