@@ -67,7 +67,8 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.9.0")
     implementation("com.kakao.sdk:v2-user:2.10.0")
-    implementation("com.kakao.maps.open:android:2.9.5")  // Kakao Map SDK 추가
+    implementation("com.kakao.maps.open:android:2.9.5") // Kakao Map SDK 추가
+    //implementation ("net.daum.android.map:map-sdk:1.4.1") //카카오지도 SDK
     implementation("androidx.activity:activity:1.8.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
