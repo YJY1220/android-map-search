@@ -3,17 +3,16 @@ package campus.tech.kakao.map
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import campus.tech.kakao.map.databinding.ActivityMapBinding
+import campus.tech.kakao.map.databinding.ActivityMainBinding
 import com.kakao.vectormap.MapView
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityMapBinding
-
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMapBinding.inflate(layoutInflater)
+        binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         val mapView = MapView(this)

@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
-import campus.tech.kakao.map.databinding.ActivityMainBinding
+import campus.tech.kakao.map.databinding.ActivitySearchBinding
 import androidx.lifecycle.ViewModelProvider
 import android.widget.Toast
 import androidx.lifecycle.Observer
@@ -14,14 +14,14 @@ import androidx.recyclerview.widget.RecyclerView
 
 class SearchActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityMainBinding
+    private lateinit var binding: ActivitySearchBinding
     private lateinit var viewModel: MapViewModel
     private lateinit var searchAdapter: SearchAdapter
     private lateinit var selectedAdapter: SelectedAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         viewModel = ViewModelProvider(this).get(MapViewModel::class.java)
