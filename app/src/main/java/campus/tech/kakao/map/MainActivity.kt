@@ -1,11 +1,16 @@
 package campus.tech.kakao.map
 
+<<<<<<< HEAD
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
+=======
+import android.content.Intent
+>>>>>>> f43e96d1f8d8dd4db3d9bfc0d0851b18671eeaa9
 import android.os.Bundle
 import android.util.Base64
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+<<<<<<< HEAD
 import campus.tech.kakao.map.R
 import com.kakao.vectormap.MapView
 import com.kakao.vectormap.MapLifeCycleCallback
@@ -16,11 +21,20 @@ import java.security.MessageDigest
 class MainActivity : AppCompatActivity() {
 
     private lateinit var mapView: MapView
+=======
+import net.daum.mf.map.api.MapView
+import campus.tech.kakao.map.databinding.ActivityMainBinding
+
+class MainActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityMainBinding
+>>>>>>> f43e96d1f8d8dd4db3d9bfc0d0851b18671eeaa9
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+<<<<<<< HEAD
         mapView = findViewById(R.id.map_view)
 
         mapView.start(object : MapLifeCycleCallback() {
@@ -64,4 +78,29 @@ class MainActivity : AppCompatActivity() {
             Log.e("not found", e.toString())
         }
     }
+=======
+        val mapView = MapView(this)
+        binding.mapViewContainer.addView(mapView)
+
+        binding.searchButton.setOnClickListener {
+            val intent = Intent(this, SearchActivity::class.java)
+            startActivity(intent)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.mapViewContainer.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        binding.mapViewContainer.onPause()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        binding.mapViewContainer.onDestroy()
+    }
+>>>>>>> f43e96d1f8d8dd4db3d9bfc0d0851b18671eeaa9
 }

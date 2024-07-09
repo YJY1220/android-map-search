@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 
+=======
+>>>>>>> f43e96d1f8d8dd4db3d9bfc0d0851b18671eeaa9
 import java.util.Properties
 
 // Function to get API key from local.properties
@@ -68,7 +71,8 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.kakao.maps.open:android:2.9.5") //kakao map
     implementation("com.squareup.okhttp3:logging-interceptor:4.9.0")
-    implementation("com.kakao.sdk:v2-user:2.10.0")  // Kakao SDK 추가
+    implementation("com.kakao.sdk:v2-user:2.10.0")
+    implementation("com.kakao.maps.open:android:2.9.5")  // Kakao Map SDK 추가
     implementation("androidx.activity:activity:1.8.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

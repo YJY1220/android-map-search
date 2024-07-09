@@ -18,4 +18,3 @@ dependencyResolutionManagement {
 
 rootProject.name = "android-map-search"
 include(":app")
-include(":app")

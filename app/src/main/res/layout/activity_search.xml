@@ -59,4 +59,8 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:visibility="visible"/>
+<<<<<<< HEAD
 </LinearLayout>
+=======
+</LinearLayout>
+>>>>>>> f43e96d1f8d8dd4db3d9bfc0d0851b18671eeaa9
