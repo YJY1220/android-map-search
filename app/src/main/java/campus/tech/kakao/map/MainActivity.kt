@@ -1,108 +1,67 @@
 package campus.tech.kakao.map
 
+import android.content.pm.PackageInfo
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Base64
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import android.text.Editable
-import android.text.TextWatcher
-import android.view.View
-import campus.tech.kakao.map.databinding.ActivityMainBinding
-import androidx.lifecycle.ViewModelProvider
-import android.widget.Toast
-import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import campus.tech.kakao.map.R
+import com.kakao.vectormap.MapView
+import com.kakao.vectormap.MapLifeCycleCallback
+import com.kakao.vectormap.KakaoMapReadyCallback
+import com.kakao.vectormap.KakaoMap
+import java.security.MessageDigest
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityMainBinding
-    private lateinit var viewModel: MapViewModel
-    private lateinit var searchAdapter: SearchAdapter
-    private lateinit var selectedAdapter: SelectedAdapter
+    private lateinit var mapView: MapView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        setContentView(R.layout.activity_main)
 
-        viewModel = ViewModelProvider(this).get(MapViewModel::class.java)
+        mapView = findViewById(R.id.map_view)
 
-        setupRecyclerViews()
-        setupSearchEditText()
-        setupClearTextButton()
-        observeViewModel()
-    }
-
-    private fun setupRecyclerViews() {
-        searchAdapter = SearchAdapter { item ->
-            if (viewModel.selectedItems.value?.contains(item) == true) {
-                Toast.makeText(this, getString(R.string.item_already_selected), Toast.LENGTH_SHORT).show()
-            } else {
-                viewModel.selectItem(item)
-            }
-        }
-
-        binding.searchResultsRecyclerView.apply {
-            layoutManager = LinearLayoutManager(this@MainActivity)
-            adapter = searchAdapter
-        }
-
-        selectedAdapter = SelectedAdapter { item -> viewModel.removeSelectedItem(item) }
-        binding.selectedItemsRecyclerView.apply {
-            layoutManager = LinearLayoutManager(this@MainActivity, RecyclerView.HORIZONTAL, false)
-            adapter = selectedAdapter
-        }
-    }
-
-    private fun setupSearchEditText() {
-        binding.searchEditText.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (s.toString().isNotEmpty()) {
-                    binding.clearTextButton.visibility = View.VISIBLE
-                } else {
-                    binding.clearTextButton.visibility = View.GONE
-                }
-                viewModel.searchQuery.value = s.toString()
+        mapView.start(object : MapLifeCycleCallback() {
+            override fun onMapDestroy() {
+                // 지도 API 가 정상적으로 종료될 때 호출됨
             }
 
-            override fun afterTextChanged(s: Editable?) {}
-        })
-    }
-
-    private fun setupClearTextButton() {
-        binding.clearTextButton.setOnClickListener {
-            binding.searchEditText.text.clear()
-        }
-    }
-
-    private fun observeViewModel() {
-        viewModel.searchResults.observe(this, Observer { results ->
-            searchAdapter.submitList(results)
-
-            if (results.isEmpty()) {
-                if (viewModel.searchQuery.value.isNullOrEmpty()) {
-                    binding.noResultsTextView.visibility = View.VISIBLE
-                } else {
-                    binding.noResultsTextView.visibility = View.GONE
-                }
-            } else {
-                binding.noResultsTextView.visibility = View.GONE
+            override fun onMapError(error: Exception) {
+                // 인증 실패 및 지도 사용 중 에러가 발생할 때 호출됨
             }
-
-            if (results.isEmpty()) {
-                if (viewModel.searchQuery.value.isNullOrEmpty()) {
-                    binding.searchResultsRecyclerView.visibility = View.GONE
-                } else {
-                    binding.searchResultsRecyclerView.visibility = View.VISIBLE
-                }
-            } else {
-                binding.searchResultsRecyclerView.visibility = View.VISIBLE
+        }, object : KakaoMapReadyCallback() {
+            override fun onMapReady(kakaoMap: KakaoMap) {
+                // 인증 후 API 가 정상적으로 실행될 때 호출됨
             }
         })
 
-        viewModel.selectedItems.observe(this, Observer { selectedItems ->
-            selectedAdapter.submitList(selectedItems)
-        })
+        // 앱 키 해시를 로그로 출력
+        getAppKeyHash()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mapView.resume()  // MapView 의 resume 호출
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mapView.pause()  // MapView 의 pause 호출
+    }
+
+    private fun getAppKeyHash() {
+        try {
+            val info: PackageInfo = packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES)
+            for (signature in info.signatures) {
+                val md: MessageDigest = MessageDigest.getInstance("SHA")
+                md.update(signature.toByteArray())
+                val something = String(Base64.encode(md.digest(), 0))
+                Log.d("Hash key", something)
+            }
+        } catch (e: Exception) {
+            Log.e("not found", e.toString())
+        }
     }
 }
